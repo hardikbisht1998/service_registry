@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: api-gateway
+
+
+
+#api gateway config
+  cloud:
+    gateway:
+      routes:
+        - id: order-service
+          uri: lb://order-service-mc1
+          predicates:
+            - Path=/api/v1/orders/**
+          filters:
+            - StripPrefix=2
+#            - RedirectTo=302, http://youtube.com
+        - id: inventory-service
+          uri: lb://inventory-service-mc2
+          predicates:
+            - Path=/api/v1/inventory/**
+          filters:
+            - AddRequestHeader=X-Custom-Header, hardik
+            - StripPrefix=2
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+
